@@ -3,14 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>متجري الخاص</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .product { border: 1px solid #ddd; padding: 15px; margin: 10px; border-radius: 8px; }
+    </style>
 </head>
 <body>
-    <h1>مرحباً بك في متجري</h1>
-    <div id="products">جاري تحميل المنتجات...</div>
+    <h1>قائمة المنتجات</h1>
+    <div id="products">جاري التحميل...</div>
 
     <script>
-        // هذا الكود سيعرض المنتجات لاحقاً
-        document.getElementById('products').innerHTML = "قريباً سأضيف المنتجات هنا";
+        fetch('data.json')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('products');
+                container.innerHTML = '';
+                data.forEach(item => {
+                    container.innerHTML += `
+                        <div class="product">
+                            <h3>${item.name}</h3>
+                            <p>السعر: ${item.price} دج</p>
+                            <p>المخزون: ${item.stock}</p>
+                            <p>${item.description}</p>
+                        </div>`;
+                });
+            })
+            .catch(err => {
+                document.getElementById('products').innerHTML = "حدث خطأ في تحميل البيانات.";
+            });
     </script>
 </body>
 </html>
